@@ -5,21 +5,39 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if(!empty($email) && !empty($password) ){
+        $signupsucc = false; // Sign Up Successfully
 
-            $Checksql = "SELECT * FROM users WHERE email='$email'";
-            $checkResult = mysqli_query($conn, $Checksql);
-            $checkNum = mysqli_num_rows($checkResult);
+        if(!empty($email) && !empty($password) && !empty($username) ){
 
-            if($checkNum < 1){
-                $sql ="INSERT INTO users(username, email, password)
-                VALUE('$username', '$email', '$password')
-                ";
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $sql = "SELECT * FROM users WHERE email='$email'";
                 $result = mysqli_query($conn, $sql);
-                header('location:login.php');
-            }
-           }
-          }
+            
+                if (mysqli_num_rows($result) != 0) {
+                    echo "*Email already exists. Try another one.";
+                }
+                    else {  
+                        $pattern = '/^[A-Z].*\d.*$/';
+
+                        if (preg_match($pattern, $password)) {
+
+                            $sql ="INSERT INTO users(username, email, password)
+                            VALUE('$username', '$email', '$password')
+                            ";
+                             $result = mysqli_query($conn, $sql);
+                             if ($result) {
+                                $signupsucc = true; // Sign Up Successfully
+                                header('location:login.php');
+                                exit;
+                            }
+                        }else {
+                            echo "*Password must be 6 characters with one uppercase letter and one number.";
+                        }
+                    } 
+                    }
+                }
+    }
+          
             ?>
 
 <!DOCTYPE html>
@@ -36,12 +54,12 @@
         <div class="div1">
         
         <label for="username">Username</label><br>
-        <input type="text" id="username" name="username" placeholder="username"><br>
+        <input type="text" id="username" name="username" placeholder="username" required><br>
         <label for="ph">phone number or email</label><br>
-        <input type="text" id="ph" name="email" placeholder="please enter your email"><br>
+        <input type="text" id="ph" name="email" placeholder="please enter your email" required><br>
         <label for="password">password</label><br>
         <input type="password" id="password" name="password" placeholder="please enter your password"><br><br>
-        <input style="background-color: antiquewhite;" type="submit" name="submit" value="sign up">
+        <input style="background-color: antiquewhite;" type="submit" name="submit" value="sign up" required>
         </div>
     </form>
 </body>

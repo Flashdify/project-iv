@@ -8,14 +8,25 @@
             
             $sql = "SELECT * FROM users WHERE email='$email' AND password ='$password'";
             $result= mysqli_query($conn,$sql);
+            $a="rajiv@gmail.com";
+            $b="Rajiv123";
             
-            
-            
+           
+          
            if(mysqli_num_rows($result)>0){
-            header('location:homee.php');
+            if($email===$a && $password===$b){
+                  header('location:sidebar\sidebar.php');
             }
-           }
-          }
+                 else{
+            header('location:rajiv.php');
+            }
+               
+              
+            }
+            echo "Email or Password is Invalid";
+
+        }
+    }      
             ?>
 
 <!DOCTYPE html>
@@ -27,13 +38,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>welcome! please login</h2>
+<h2>welcome! please login!</h2>
     <form <?php $_SERVER['PHP_SELF']?>method= "POST" >
         <div class="div1">
         <label for="ph">phone number or email</label><br>
-        <input type="text" id="ph" name="email" placeholder="please enter your email"><br>
+        <input type="text" id="ph" name="email" placeholder="please enter your email" required><br>
         <label for="password">password</label><br>
-        <input type="password" id="password" name="password" placeholder="please enter your password"><br><br>
+        <input type="password" id="password" name="password" placeholder="please enter your password" required><br><br>
         <input style="background-color: antiquewhite;" type="submit" name="submit" value="login">
         </div>
     </form>
